@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LION Global Regents Review</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:linear-gradient(180deg,#fefce8 0%,#dbeafe 100%);color:#1f2937}
+header{background:linear-gradient(90deg,#0f4c81,#1d4ed8);color:white;padding:20px;text-align:center;box-shadow:0 6px 20px rgba(15,76,129,.2)}
+main{max-width:1200px;margin:0 auto;padding:16px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;position:sticky;top:0;z-index:10;background:rgba(248,250,252,.9);backdrop-filter:blur(8px);padding:10px;border-radius:14px}
+button{border:0;border-radius:12px;padding:12px 16px;background:#0f4c81;color:white;cursor:pointer;font-weight:700;min-height:44px} button:hover{filter:brightness(1.05)}
+button.secondary{background:#334155}
+button.good{background:#166534}
+button.bad{background:#991b1b}
+.card{background:white;border-radius:14px;padding:16px;margin:14px 0;box-shadow:0 4px 14px rgba(0,0,0,.08);border-top:4px solid #facc15}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.flash{perspective:1000px;min-height:160px;cursor:pointer}
+.flash-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flash.flipped .flash-inner{transform:rotateY(180deg)}
+.flash-face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid #cbd5e1;border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff}
+.flash-back{transform:rotateY(180deg);background:#f8fafc}
+.small{font-size:.92rem;color:#475569}
+.badge{display:inline-block;background:#f59e0b;color:#111827;padding:6px 10px;border-radius:999px;margin-right:6px;margin-top:6px}
+#timelineCanvas{width:100%;max-width:1100px;height:220px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}
+input[type=text], textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;box-sizing:border-box}
+textarea{min-height:90px}
+label{font-weight:bold;display:block;margin:8px 0 6px}
+hr{border:none;border-top:1px solid #e2e8f0;margin:16px 0}
+</style>
+</head>
+<body>
+<header>
+<img src="LION-Leaders-in-our-Neighborhood-FC-RMark-3x.jpg" alt="LION Charter School logo" style="max-width:320px;width:100%;height:auto;display:block;margin:0 auto 10px auto;border-radius:10px;background:white;padding:8px">
+<h1>LION Global Regents Review</h1>
+<p>Global History and Geography Regents Study Hub - Created by Alexander Timothy Napoleon-Venne the Great</p>
+<div id="progress">Score: 0 / 0 | Level: Beginner</div><div style='margin-top:10px;color:#fef3c7;font-weight:bold'>Go LIONs!</div>
+</header>
+<main>
+<section class="card" style="text-align:center">
+  <h2>Choose Your Path</h2>
+  <p>Pick a study mode for the Regents exam.</p>
+  <div class="grid" style="margin-top:12px">
+    <button style="background:#1d4ed8;font-size:1.1rem" onclick="showHome()">Study</button>
+    <button style="background:#f59e0b;color:#111827;font-size:1.1rem" onclick="showGame('quiz')">Practice</button>
+    <button style="background:#166534;font-size:1.1rem" onclick="showGame('matching')">Play</button>
+  </div>
+</section>
+<nav>
+<button onclick="showHome()">Home</button>
+<button onclick="showUnit(1)">Unit 1</button>
+<button onclick="showUnit(2)">Unit 2</button>
+<button onclick="showUnit(3)">Unit 3</button>
+<button onclick="showUnit(4)">Unit 4</button>
+<button onclick="showUnit(5)">Unit 5</button>
+<button onclick="showUnit(6)">Unit 6</button>
+<button onclick="showUnit(7)">Unit 7</button>
+<button onclick="showUnit(8)">Unit 8</button>
+<button onclick="showUnit(9)">Unit 9</button>
+<button class="secondary" onclick="showGame('matching')">Matching Game</button>
+<button class="secondary" onclick="showGame('timeline')">Timeline Challenge</button>
+<button class="secondary" onclick="showGame('saq')">SAQ Practice</button>
+<button class="secondary" onclick="showGame('dbq')">DBQ Practice</button>
+<button class="secondary" onclick="showGame('leq')">LEQ Practice</button>
+<button class="secondary" onclick="showGame('quiz')">Regents Quiz</button>
+<button class="secondary" onclick="showSources()">Video Links</button>
+<button class="secondary" onclick="resetProgress()">Reset</button>
+</nav>
+<section id="app"></section>
+</main><script>
+const units = {
+1:{title:'Unit 1: The Age of Absolutism', period:'1600s-1700s', summary:'Absolute monarchs centralized power and ruled by divine right.', terms:[['Absolutism','A system where a monarch has total control.'],['Divine Right','Belief that kings get power from God.'],['Peter the Great','Russian ruler who westernized and expanded Russia.'],['Louis XIV','French absolute monarch who strengthened royal power.']], timeline:[['1600s','Rise of absolutism in Europe'],['1689','Glorious Revolution limited English monarchy']], saq:['Explain one way absolutism strengthened a state.','Describe one effect of Peter the Great or Louis XIV.'], quiz:[['What belief supported absolute monarchs?',['Divine Right','Socialism','Federalism'],0],['Which ruler westernized Russia?',['Peter the Great','Voltaire','Mussolini'],0]], dbq:'How did absolute monarchs use power to strengthen their states?'} ,
+2:{title:'Unit 2: Scientific Revolution and Enlightenment', period:'1500s-1700s', summary:'New scientific ideas challenged old beliefs and inspired reforms.', terms:[['Scientific Revolution','A dramatic change in how people understood the world.'],['Heliocentric Theory','Planets revolve around the sun.'],['John Locke','Argued for natural rights.'],['Montesquieu','Supported separation of powers.'],['Voltaire','Supported freedom of speech and religion.']], timeline:[['1500s','Scientific Revolution begins'],['1700s','Enlightenment spreads']], saq:['State one effect of the Scientific Revolution.','Explain how Enlightenment ideas influenced revolutions.'], quiz:[['Who argued for natural rights?',['Locke','Newton','Henry VIII'],0],['What is the heliocentric theory?',['Sun-centered solar system','Earth-centered universe','Moon-centered system'],0]], dbq:'How did Enlightenment ideas challenge traditional government?'} ,
+3:{title:'Unit 3: Age of Revolutions', period:'1689-1830', summary:'Revolutions changed governments in England, France, Latin America, and elsewhere.', terms:[['Limited Monarchy','Monarch power is restricted by laws.'],['French Revolution','French people overthrew Louis XVI.'],['Nationalism','Strong loyalty to one’s country.'],['Simon Bolivar','Led independence movements in Latin America.'],['Napoleon','Expanded French power and spread nationalism.']], timeline:[['1689','Glorious Revolution'],['1789','French Revolution'],['1800-1830','Latin American Revolutions']], saq:['Why did the French Revolution happen?','How did nationalism affect Italy or Latin America?'], quiz:[['Which revolution began in 1789?',['French Revolution','Industrial Revolution','Russian Revolution'],0],['Who was a Latin American independence leader?',['Simon Bolivar','Gandhi','Bismarck'],0]], dbq:'To what extent did Enlightenment ideas cause the Age of Revolutions?'} ,
+4:{title:'Unit 4: Industrial Revolution and Imperialism', period:'1700s-1914', summary:'Factories, migration, and imperialism transformed the world economy.', terms:[['Industrialization','Machine production in factories.'],['Urbanization','Growth of cities.'],['Laissez-Faire','Business decisions with little government control.'],['Imperialism','One country controls another.'],['Social Darwinism','Belief that strong nations should dominate weak ones.']], timeline:[['1700s','Industrial Revolution begins in Britain'],['1800s','High imperialism in Africa and Asia']], saq:['Explain one cause of imperialism.','Describe one effect of industrialization on workers.'], quiz:[['What system allowed private business ownership?',['Laissez-Faire','Command economy','Theocracy'],0],['Why did Europeans imperialize Africa and Asia?',['Raw materials','To reduce trade','To end industry'],0]], dbq:'How did industrialization lead to new forms of imperialism?'} ,
+5:{title:'Unit 5: World War I and Russian Revolution', period:'1914-1919', summary:'Global war and revolution redrew political borders and created new governments.', terms:[['Militarism','Build-up of armies and weapons.'],['Alliances','Military partnerships between countries.'],['Treaty of Versailles','Punished Germany after WWI.'],['Bolsheviks','Revolutionaries led by Lenin.'],['Communism','Economic system based on shared ownership.']], timeline:[['1914','World War I begins'],['1917','Russian Revolution'],['1919','Treaty of Versailles']], saq:['Identify one cause of World War I.','Explain one effect of the Russian Revolution.'], quiz:[['Which event ended WWI?',['Treaty of Versailles','Berlin Conference','Marshall Plan'],0],['Who led the Bolsheviks?',['Lenin','Stalin','Mao'],0]], dbq:'How did World War I contribute to political change in Europe?'} ,
+6:{title:'Unit 6: Interwar Period and World War II', period:'1919-1945', summary:'Totalitarianism, aggression, and genocide marked this era.', terms:[['Totalitarianism','One ruler controls all aspects of life.'],['Propaganda','Messages used to influence people.'],['Appeasement','Giving in to avoid war.'],['Holocaust','Nazi genocide against Jews and others.'],['Genocide','Attempt to destroy an entire group.']], timeline:[['1939','World War II begins'],['1945','World War II ends and UN formed']], saq:['Explain one reason Hitler rose to power.','Describe one human rights violation from WWII.'], quiz:[['What is appeasement?',['Giving in to avoid conflict','Starting a war','Electing a president'],0],['What is the Holocaust?',['Nazi genocide','A peace treaty','A battle'],0]], dbq:'Why did totalitarian regimes and aggression lead to World War II?'} ,
+7:{title:'Unit 7: Cold War and Decolonization', period:'1945-1991', summary:'The Cold War divided the world while colonies gained independence.', terms:[['Containment','U.S. policy to stop communism.'],['Iron Curtain','Division between communist and democratic Europe.'],['Decolonization','Colonies gaining independence.'],['Nonalignment','Not choosing sides in the Cold War.'],['Apartheid','System of racial segregation in South Africa.']], timeline:[['1945','Cold War begins'],['1948','India and Pakistan partitioned'],['1991','Soviet Union collapses']], saq:['Explain one cause of decolonization.','Describe one effect of the Cold War in Asia or Africa.'], quiz:[['What was containment?',['Stopping spread of communism','Joining the UN','Ending trade'],0],['What is apartheid?',['Racial segregation','A voting law','A treaty'],0]], dbq:'How did Cold War tensions affect newly independent nations?'} ,
+8:{title:'Unit 8: Globalization and the Modern World', period:'Post-1991', summary:'Interdependence, technology, and global issues shape the modern world.', terms:[['Globalization','Increasing connection among countries.'],['Interdependence','Countries relying on one another.'],['OPEC','Oil-producing nations that influence oil prices.'],['Environmentalism','Efforts to protect the environment.'],['Human Rights','Basic rights all people should have.']], timeline:[['1991','Cold War ends'],['1997','Kyoto Protocol signed'],['2000s','Globalization expands']], saq:['Explain one effect of globalization.','Describe one environmental issue in the modern world.'], quiz:[['What does OPEC influence?',['Oil prices','School rules','Voting age'],0],['What is globalization?',['Greater worldwide connection','Isolation','Feudalism'],0]], dbq:'How has globalization changed economies and societies?'} ,
+9:{title:'Review and Regents Practice', period:'All units', summary:'Use this section to practice mixed review and exam skills.', terms:[['Theme','A big idea that connects multiple units.'],['Causation','Explaining why events happen.'],['Continuity and Change','What stayed the same and what changed over time.'],['Context','The situation around a historical event.']], timeline:[['All year','Connect units by theme and time period']], saq:['Write an SAQ about a major turning point in world history.','Compare two historical developments from different units.'], quiz:[['Which skill asks why events happened?',['Causation','Listing','Drawing'],0],['What does context mean?',['The situation around an event','The final answer','A map only'],0]], dbq:'Write a practice DBQ using evidence from two or more units.'}
+};
+
+const videos = [
+['Heimler’s History', 'https://www.youtube.com/@heimlershistory'],
+['AP World History review playlists', 'https://www.youtube.com/c/SteveHeimler/playlists'],
+['College Board AP World History exam page', 'https://apcentral.collegeboard.org/courses/ap-world-history/exam'],
+['College Board past exam questions', 'https://apcentral.collegeboard.org/courses/ap-world-history/exam/past-exam-questions']
+];
+
+let state = JSON.parse(localStorage.getItem('globalRegentsState') || '{"score":0,"total":0,"completed":[]}');
+let currentStudent = localStorage.getItem('globalRegentsName') || '';
+let leaderboard = JSON.parse(localStorage.getItem('globalRegentsBoard') || '[]');
+function save(){localStorage.setItem('globalRegentsState',JSON.stringify(state)); updateProgress();}
+function saveStudentName(){ currentStudent = document.getElementById('studentName').value.trim() || 'Guest'; localStorage.setItem('globalRegentsName', currentStudent); renderLeaderboard(); }
+function renderLeaderboard(){
+const box = document.getElementById('leaderboardBox');
+if(!box) return;
+const sorted = [...leaderboard].sort((a,b)=>b.score-a.score).slice(0,5);
+box.innerHTML = sorted.length ? '<ol>' + sorted.map(r=>`<li><strong>${r.name}</strong> — ${r.score}</li>`).join('') + '</ol>' : '<p class="small">No scores yet. Be the first!</p>';
+}
+function updateLeaderboard(){
+if(!currentStudent) return;
+const existing = leaderboard.findIndex(r => r.name.toLowerCase() === currentStudent.toLowerCase());
+const entry = {name: currentStudent, score: state.score};
+if(existing >= 0){ leaderboard[existing] = leaderboard[existing].score > entry.score ? leaderboard[existing] : entry; } else { leaderboard.push(entry); }
+leaderboard = leaderboard.sort((a,b)=>b.score-a.score).slice(0,5);
+localStorage.setItem('globalRegentsBoard', JSON.stringify(leaderboard));
+renderLeaderboard();
+}
+function updateProgress(){
+const pct = state.total ? state.score/state.total : 0;
+const level = pct >= .85 ? 'Mastery' : pct >= .65 ? 'Proficient' : pct >= .4 ? 'Developing' : 'Beginner';
+document.getElementById('progress').textContent = `Score: ${state.score} / ${state.total} | Level: ${level}`;
+}
+function badge(text){return `<span class="badge">${text}</span>`;}
+function showHome(){
+const completed = state.completed.length ? state.completed.map(n=>`Unit ${n}`).join(', ') : 'None yet';
+document.getElementById('app').innerHTML = `
+<div class="card"><h2>Welcome</h2><p>This site is built from the Global Regents review guide PDFs and includes review games, activities, and exam practice. [file:17][file:18]</p><label>Student name</label><input type="text" id="studentName" placeholder="Enter your name" value="${currentStudent}"><button onclick="saveStudentName()">Sign in</button><p class="small">Completed units: ${completed}</p><div>${badge('Flashcards')} ${badge('Timelines')} ${badge('SAQ')} ${badge('DBQ')} ${badge('LEQ')} ${badge('Quiz Games')}</div></div>
+<div class="grid">
+<div class="card"><h3>How to use</h3><ol><li>Choose a unit.</li><li>Study key terms.</li><li>Play the game.</li><li>Do the SAQ, DBQ, and LEQ practice.</li></ol></div>
+<div class="card"><h3>What is included</h3><p>Absolutism, revolutions, industrialization, imperialism, world wars, the Cold War, decolonization, and globalization. [file:17][file:18]</p></div>
+<div class="card"><h3>Top 5 Leaderboard</h3><div id="leaderboardBox"></div></div>
+</div>`;
+renderLeaderboard();
+}
+function showUnit(n){
+const u = units[n];
+state.completed = [...new Set([...state.completed, n])]; save();
+let termHtml = u.terms.map(([t,d])=>`<div class="flash card flash" onclick="this.classList.toggle('flipped')"><div class="flash-inner"><div class="flash-face"><strong>${t}</strong></div><div class="flash-face flash-back">${d}</div></div></div>`).join('');
+let quizHtml = u.quiz.map((q,i)=>`<div class="card"><p><strong>Question ${i+1}:</strong> ${q[0]}</p>${q[1].map((o,j)=>`<button onclick="check(${n}, ${i}, ${j===q[2]}, this)">${o}</button>`).join(' ')}</div>`).join('');
+let saqHtml = u.saq.map((p,i)=>`<div class="card"><p><strong>SAQ ${i+1}:</strong> ${p}</p><label>Answer</label><textarea id="saq_${n}_${i}" placeholder="Type your response here..."></textarea><button onclick="showModelAnswer(${n},${i})">Show self-check tips</button><div id="saq_tip_${n}_${i}"></div></div>`).join('');
+let timelineHtml = `<canvas id="timelineCanvas" width="1100" height="220"></canvas>`;
+document.getElementById('app').innerHTML = `
+<div class="card"><h2>${u.title}</h2><p><strong>Period:</strong> ${u.period}</p><p>${u.summary}</p></div>
+<div class="card"><h3>Key Terms</h3><div class="grid">${termHtml}</div></div>
+<div class="card"><h3>Timeline</h3>${timelineHtml}</div>
+<div class="card"><h3>Practice Quiz</h3>${quizHtml}</div>
+<div class="card"><h3>SAQ Practice</h3>${saqHtml}</div>
+<div class="card"><h3>DBQ Practice</h3><p>${u.dbq}</p><button onclick="loadDBQ(${n})">Open DBQ planning tool</button><div id="dbq_box"></div></div>
+<div class="card"><h3>LEQ Practice</h3><p>Write a historical argument using evidence from this unit. Focus on thesis, context, and specific evidence.</p><button onclick="loadLEQ(${n})">Open LEQ planning tool</button><div id="leq_box"></div></div>`;
+drawTimeline(u.timeline);
+}
+function check(unit, q, correct, btn){
+state.total += 1; if(correct) state.score += 1; save(); updateLeaderboard(); btn.style.background = correct ? '#166534' : '#991b1b';
+}
+function showModelAnswer(unit,i){
+document.getElementById(`saq_tip_${unit}_${i}`).innerHTML = '<p class="small"><strong>Self-check:</strong> Give a direct answer, include one fact from the unit, and explain how it supports the point.</p>';
+}
+function drawTimeline(items){
+const c = document.getElementById('timelineCanvas'); if(!c) return; const ctx = c.getContext('2d');
+ctx.clearRect(0,0,c.width,c.height); ctx.fillStyle='#0f172a'; ctx.font='16px Arial'; ctx.beginPath(); ctx.moveTo(60,110); ctx.lineTo(1040,110); ctx.stroke();
+const positions = items.length === 1 ? [550] : items.map((_,i)=>80 + i*(920/Math.max(1,items.length-1)));
+items.forEach((it,i)=>{ const x=positions[i]; ctx.beginPath(); ctx.arc(x,110,6,0,Math.PI*2); ctx.fill(); ctx.fillText(it[0], x-40, 85); ctx.fillText(it[1], x-60, 145); });
+}
+function showGame(type){
+if(type==='matching'){
+const mix = [
+['Absolutism','Absolute monarch with total control'],['Industrialization','Factories and machines'],['Containment','Stop communism'],['Globalization','More connected world']
+].sort(()=>Math.random()-.5);
+document.getElementById('app').innerHTML = `<div class="card"><h2>Matching Game</h2><p>Match the term to the correct meaning by clicking the check buttons in order.</p>${mix.map((m,i)=>`<div class="card"><strong>${m[0]}</strong> — ${m[1]} <button onclick="award(1)">Got it</button></div>`).join('')}</div>`;
+}
+if(type==='timeline'){
+showHome();
+document.getElementById('app').innerHTML += `<div class="card"><h3>Timeline Challenge</h3><p>Put these in order: Scientific Revolution, French Revolution, World War I, Cold War, Globalization.</p><button onclick="award(1)">I can order them</button></div>`;
+}
+if(type==='saq') showUnit(9);
+if(type==='dbq') {
+document.getElementById('app').innerHTML = `<div class="card"><h2>DBQ Practice</h2><p>Choose a unit DBQ and plan your response: thesis, context, document evidence, outside evidence, and sourcing.</p><p>Suggested prompt: How did industrialization change societies and economies?</p><button onclick="award(1)">I have a thesis</button></div>`;
+}
+if(type==='leq') {
+document.getElementById('app').innerHTML = `<div class="card"><h2>LEQ Practice</h2><p>Write a strong argument with a thesis, historical context, and at least two specific pieces of evidence.</p><p>Suggested prompt: Evaluate the most significant cause of World War I.</p><button onclick="award(1)">I can outline it</button></div>`;
+}
+if(type==='quiz') showUnit(1);
+}
+function loadDBQ(n){
+document.getElementById('dbq_box').innerHTML = `<p><strong>Planning Tool:</strong> Thesis, Context, Evidence, Sourcing, Complexity.</p><ul><li>Thesis: Answer the prompt directly.</li><li>Context: Explain what was happening before the event.</li><li>Evidence: Use at least three facts.</li><li>Sourcing: Explain point of view or purpose.</li></ul>`;
+}
+function loadLEQ(n){
+document.getElementById('leq_box').innerHTML = `<p><strong>Planning Tool:</strong> Thesis, Context, Evidence, Reasoning.</p><ul><li>Thesis: Make a defensible claim.</li><li>Context: Set up the time period.</li><li>Evidence: Use specific examples.</li><li>Reasoning: Explain why your evidence proves the point.</li></ul>`;
+}
+function award(n){ state.score += n; state.total += n; save(); updateLeaderboard(); }
+function showSources(){
+document.getElementById('app').innerHTML = `<div class="card"><h2>Video and Reference Links</h2>${videos.map(v=>`<p><a href="${v[1]}" target="_blank" rel="noreferrer">${v[0]}</a></p>`).join('')}</div>`;
+}
+function resetProgress(){ state={score:0,total:0,completed:[]}; save(); updateLeaderboard(); showHome(); }
+showHome();
+</script>
+</body>
+</html>
+
+<!-- Mobile-friendly updated theme applied -->
